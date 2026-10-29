@@ -343,6 +343,7 @@ main{flex:1;padding-bottom:88px}
       </div>
       <div class="scan-actions">
         <button class="btn btn-primary btn-hero" id="enterMenu">开始点单</button>
+        <button class="btn" id="contactBoss" style="margin:10px auto 0;width:auto;padding:8px 20px;font-size:14px;background:#f5e6d3;color:#8b5a2b;border:1px solid #e0c9a6">联系我们</button>
       </div>
     </section>
 
@@ -409,6 +410,16 @@ main{flex:1;padding-bottom:88px}
   </div>
 
   <div id="toast"></div>
+
+  <!-- 老板联系方式弹窗 -->
+  <div id="contactMask" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center" onclick="if(event.target===this)closeContact()">
+    <div style="background:#fff;border-radius:16px;padding:24px;width:85%;max-width:320px;text-align:center">
+      <h3 style="margin:0 0 4px;font-size:18px">联系我们</h3>
+      <p style="color:var(--sub);font-size:13px;margin:0 0 16px">微信扫码加好友 · 下单更方便</p>
+      <img src="assets/boss-wechat-qr.webp" alt="老板微信二维码" style="width:220px;border-radius:12px">
+      <button class="btn btn-primary" style="margin-top:16px;width:100%">关闭</button>
+    </div>
+  </div>
   <div class="img-mask" id="imgMask" style="display:none" onclick="closeImgPreview()">
     <div class="img-close" onclick="event.stopPropagation();closeImgPreview()">✕</div>
     <img id="imgMaskImg" src="" alt="">
@@ -439,7 +450,7 @@ const CATS = [
   {key:"cake",      name:"甜品", color:"#C88A5E", icon:ICON.cake},
   {key:"drink",     name:"三明治", color:"#7A9A6E", icon:ICON.cup},
   {key:"signature", name:"蛋糕", color:"#B4682F", icon:ICON.flame},
-  {key:"bread",     name:"面包", color:"#A57A52", icon:ICON.bread},
+  {key:"bread",     name:"新品预告", color:"#A57A52", icon:ICON.bread},
 ];
 const MENU = [
   {id:"c4", cat:"cake", name:"蓝莓奶盖蛋糕",   desc:"蓝莓果粒 · 奶盖顶", price:10, img:"assets/blueberry-cream-cake.webp"},
@@ -464,6 +475,30 @@ const MENU = [
   {id:"c24", cat:"cake", name:"奥利奥蓝莓蛋糕", desc:"四寸 · 奥利奥碎蓝莓点缀", price:35, img:"assets/oreo-blueberry-cake.webp"},
   {id:"c25", cat:"cake", name:"海盐焦糖杏仁蛋糕", desc:"四寸 · 焦糖海盐杏仁香脆", price:39, img:"assets/sea-salt-caramel-almond.webp"},
   {id:"c26", cat:"cake", name:"梦龙巧克力蛋糕",   desc:"四寸 · 巧克力脆皮坚果点缀", price:39, img:"assets/dragon-chocolate-cake.webp"},
+  {id:"c27", cat:"cake", name:"厚乳芋泥蛋糕",     desc:"芋泥奶冻夹心", price:12, img:"assets/thick-taro-cake.webp"},
+  {id:"c28", cat:"cake", name:"轻胚",              desc:"纸碗装 · 原味戚风", opts:[{name:"原味",price:8},{name:"+肉松",price:9}], img:"assets/light-chiffon.webp"},
+  {id:"c29", cat:"cake", name:"芒果柚子干噎酸奶", desc:"芒果底 · 西柚果肉 · 爆珠", price:15, img:"assets/mango-grapefruit-yogurt.webp"},
+  {id:"c30", cat:"cake", name:"榴莲千层碗",       desc:"四寸 · 绵密榴莲奶油 · 杯装", price:29, img:"assets/durian-mille-bowl.webp"},
+  {id:"c31", cat:"cake", name:"瑞士卷",          desc:"原味 · 红丝绒 · 巧克力 · 伯爵红茶", price:12, img:"assets/swiss-roll.webp"},
+  {id:"c32", cat:"cake", name:"杨枝甘露小蛋糕",   desc:"", price:0, img:"assets/mango-sago-cupcake.webp"},
+  {id:"c33", cat:"cake", name:"KT猫草莓布袋",     desc:"", price:0, img:"assets/kt-strawberry-bag.webp"},
+  {id:"c34", cat:"cake", name:"草莓小方",         desc:"", price:0, img:"assets/strawberry-square.webp"},
+  {id:"c35", cat:"cake", name:"奶油小贝",         desc:"", price:0, img:"assets/cream-xiaobei.webp"},
+  {id:"c36", cat:"cake", name:"虎皮瑞士卷",       desc:"", price:0, img:"assets/tiger-skin-roll.webp"},
+  {id:"c37", cat:"cake", name:"奶油酥皮泡芙",     desc:"", price:0, img:"assets/cream-puff.webp"},
+  {id:"c38", cat:"cake", name:"三寸水果蛋糕",     desc:"", price:0, img:"assets/fruit-cake-3inch.webp"},
+  {id:"c39", cat:"cake", name:"大大毛巾卷混合水果", desc:"", price:0, img:"assets/big-towel-roll-fruit.webp"},
+  {id:"c40", cat:"cake", name:"芋泥蛋糕盒子",     desc:"", price:0, img:"assets/taro-cake-box.webp"},
+  {id:"c41", cat:"cake", name:"超长草莓蛋糕",     desc:"", price:0, img:"assets/long-strawberry-cake.webp"},
+  {id:"c42", cat:"cake", name:"多拼水果盒子蛋糕", desc:"", price:0, img:"assets/mixed-fruit-box.webp"},
+  {id:"c43", cat:"cake", name:"水果蛋糕杯",       desc:"", price:0, img:"assets/fruit-cake-cup.webp"},
+  {id:"c44", cat:"cake", name:"芋泥肉松紫米杯",   desc:"", price:0, img:"assets/taro-pork-rice-cup.webp"},
+  {id:"c45", cat:"cake", name:"芋泥麻薯肉松盒子", desc:"", price:0, img:"assets/taro-mochi-pork-box.webp"},
+  {id:"c46", cat:"cake", name:"香蕉卷",           desc:"", price:0, img:"assets/banana-roll.webp"},
+  {id:"c47", cat:"cake", name:"奥利奥咸奶油盒子", desc:"", price:0, img:"assets/oreo-salt-cream-box.webp"},
+  {id:"c48", cat:"cake", name:"焦糖杏仁咸奶油盒子", desc:"", price:0, img:"assets/caramel-almond-salt-box.webp"},
+  {id:"c49", cat:"cake", name:"草莓巧克力蛋糕",   desc:"", price:0, img:"assets/strawberry-choco-cake.webp"},
+  {id:"c50", cat:"cake", name:"四寸草莓蛋糕",     desc:"", price:0, img:"assets/strawberry-cake-4inch.webp"},
   {id:"k1", cat:"drink", name:"奥尔良鸡腿排三明治", desc:"", price:6, img:"assets/orleans-chicken-sandwich.webp"},
   {id:"k2", cat:"drink", name:"方火腿火鸡面三明治", desc:"", price:6, img:"assets/ham-noodle-sandwich.webp"},
   {id:"k3", cat:"drink", name:"火山石烤肠三明治",   desc:"", price:6, img:"assets/sausage-sandwich.webp"},
@@ -759,6 +794,10 @@ function init(){
   renderCatTabs();
 
   $("#enterMenu").onclick=enterMenu;
+  $("#contactBoss").onclick=()=>{ $("#contactMask").style.display="flex"; };
+  window.closeContact=function(){ $("#contactMask").style.display="none"; };
+  $("#contactMask").addEventListener("click", function(e){ if(e.target===this) this.style.display="none"; });
+  $("#contactMask .btn-primary").onclick=closeContact;
   $("#goCheckout").onclick=openSheet;
   $("#sheetMask").onclick=closeSheet;
   $("#copyOrderBtn").onclick=copyOrder;
