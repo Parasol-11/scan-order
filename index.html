@@ -624,9 +624,9 @@ function renderMenu(){
         ${d.flavors.map(f=>`<button class="dish-flavor ${f===selFl?"active":""}" data-did="${d.id}" data-flavor="${f}">${f}</button>`).join("")}
       </div>` : "";
     return `
-      <div class="dish-card">
+      <div class="dish-card"${d.quote?' style="cursor:pointer" onclick="openContactCard()"':""}>
         ${d.img
-          ? `<div class="dish-img" style="background-image:url('${d.img}')" onclick="showImgPreview('${d.img}')">${d.hot?`<span class="hot-badge">热销</span>`:""}</div>`
+          ? `<div class="dish-img" style="background-image:url('${d.img}')" ${d.quote?"":`onclick="showImgPreview('${d.img}')"`}>${d.hot?`<span class="hot-badge">热销</span>`:""}</div>`
           : `<div class="dish-icon" style="background:${c.color}">${c.icon}</div>`}
         <div class="dish-info">
           <div class="dish-name">${d.name}${d.tag?`<span class="dish-tag">${d.tag}</span>`:""}</div>
@@ -833,6 +833,7 @@ function init(){
   $("#enterMenu").onclick=enterMenu;
   $("#contactBoss").onclick=()=>{ $("#contactMask").style.display="flex"; };
   window.closeContact=function(){ $("#contactMask").style.display="none"; };
+  window.openContactCard=function(){ $("#contactMask").style.display="flex"; };
   $("#contactMask").addEventListener("click", function(e){ if(e.target===this) this.style.display="none"; });
   $("#contactMask .btn-primary").onclick=closeContact;
   $("#goCheckout").onclick=openSheet;
